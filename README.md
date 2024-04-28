@@ -12,10 +12,12 @@ https://flask-python-template.vercel.app/
 
 This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
 
-## Running Locally
+## Creating Virtual Enviroment (VENV) AND Running Locally
 
 ```bash
 npm i -g vercel
+python -m venv venv
+venv/Scripts/Activate
 vercel dev
 ```
 
