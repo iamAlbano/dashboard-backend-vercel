@@ -13,8 +13,8 @@ class SaleRepository:
         self.db = db
         self.collection = db.sales
 
-    def create(self, product: Product):
-        sale_dict = product.to_dict()
+    def create(self, sale: Sale):
+        sale_dict = sale.to_dict()
         res = self.collection.insert_one(sale_dict)
         sale_dict['id'] = str(res.inserted_id)
         return sale_dict
@@ -384,9 +384,12 @@ class SaleRepository:
                     "_id": {
                         "date": "$date",
                         "customer_id": "$customer_id",
+                        "seller_id": "$seller_id",
+                        "date": "$date",
                     },
                     "sales": {"$push": "$$ROOT"},
                     "product_ids": {"$addToSet": "$product_id"},
+                    "products": {"$addToSet": "$product"},
                     "customer_id": {"$first": "$customer_id"},
                     "date": {"$first": "$date"},
                     "seller_id": {"$first": "$seller_id"},

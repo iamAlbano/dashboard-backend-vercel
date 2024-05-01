@@ -15,6 +15,7 @@ class SaleService:
         self,
         store_id: str,
         product_id: str,
+        product: dict or None,
         quantity: str or int or float or None,
         price: str or float or None,
         seller_id: str or None,
@@ -25,6 +26,7 @@ class SaleService:
         valid, message = self.valid_sale(
             store_id,
             product_id,
+            product,
             quantity,
             price,
             seller_id,
@@ -39,6 +41,7 @@ class SaleService:
         sale = Sale(
             store_id,
             product_id,
+            product,
             quantity,
             price,
             seller_id,
@@ -126,46 +129,8 @@ class SaleService:
         }
 
     def get_sales(self, store_id, page, page_size, start_date, end_date):
-        sales = self.sale_repository.get_sales(
+        return self.sale_repository.get_sales(
             store_id, page, page_size, start_date, end_date)
-
-        paginated_sales = []
-
-        for sale_product in sales:
-            all_products = []
-            total_value = 0
-
-            for sale in sale_product['sales']:
-                product = self.product_repository.find_by_id(
-                    sale['product_id'])
-
-                if product:
-                    product['quantity'] = float(
-                        sale['quantity']) if sale['quantity'] else 0
-                    product['price'] = float(
-                        sale['price']) if sale['price'] else 0
-
-                    total_value = total_value + \
-                        (product['quantity'] * product['price'])
-
-                    all_products.append(product)
-
-            customer = self.customer_repository.find_by_id(
-                sale_product['customer_id'])
-
-            sale_product['customer'] = customer if customer else None
-
-            paginated_sales.append({
-                'customer': sale_product['customer'],
-                'products': all_products,
-                'price': total_value,
-                'status': sale_product['status'],
-                'quantity': sale_product['quantity'],
-                'date': sale_product['date'],
-                'total': sale_product['total']
-            })
-
-        return paginated_sales
 
     def get_sales_by_period(self, store_id, start_date, end_date, period_group='month', limit=5, product_ids=None, categories=None):
         sales = self.sale_repository.get_sales_by_period(

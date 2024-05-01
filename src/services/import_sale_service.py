@@ -206,6 +206,24 @@ class ImportSaleService:
                     customer = self.customer_service.find_by_id(
                         sale[customer_column])
 
+                # if the customer is not found, try create it
+                if customer is None:
+                    new_customer = Customer(
+                        store_id=store_id,
+                        name=sale[customer_column],
+                        email=None,
+                        phone=None,
+                        birthday=None,
+                        address=None,
+                        city=None,
+                        state=None,
+                        country=None,
+                        zipcode=None,
+                        legacy_id=None,
+                    )
+                    customer, message = self.customer_service.create(
+                        new_customer)
+
             # create the sale
             quantity = sale[quantity_column] if quantity_column else 1
             price = sale[price_column] if price_column else 0
@@ -228,9 +246,18 @@ class ImportSaleService:
             except Exception as e:
                 customer_id = sale[customer_column] if customer_column else None
 
+            product_dict = {
+                "name": product['name'],
+                "description": product['description'],
+                "category": product['category'],
+                "price": product['price'],
+                "purchase_price": product['purchase_price'],
+            }
+
             sale, message = self.sale_service.create(
                 store_id=store_id,
                 product_id=product_id,
+                product=product_dict,
                 quantity=quantity,
                 price=sale[price_column] if price_column else price*quantity,
                 seller_id=sale[seller_column] if seller_column else None,
