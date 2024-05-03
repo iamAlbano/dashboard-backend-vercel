@@ -26,7 +26,6 @@ class SaleService:
         valid, message = self.valid_sale(
             store_id,
             product_id,
-            product,
             quantity,
             price,
             seller_id,
