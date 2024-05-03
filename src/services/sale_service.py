@@ -23,19 +23,13 @@ class SaleService:
         status: str or None,
         date: str or None
     ):
-        valid, message = self.valid_sale(
-            store_id,
-            product_id,
-            quantity,
-            price,
-            seller_id,
-            customer_id,
-            status,
-            date
-        )
+        # valid, message = self.valid_sale(
+        #     store_id,
+        #     product_id,
+        # )
 
-        if not valid:
-            return False, message
+        # if not valid:
+        #     return False, message
 
         sale = Sale(
             store_id,
@@ -51,15 +45,8 @@ class SaleService:
         return self.sale_repository.create(sale), "Sale created successfully"
 
     def valid_sale(
-        self,
         store_id: str,
         product_id: str,
-        quantity: str or int or float or None,
-        price: str or float or None,
-        seller_id: str or None,
-        customer_id: str or None,
-        status: str or None,
-        date: str or None
     ):
         if not store_id or type(store_id) != str:
             return False, "Missing store_id field"
