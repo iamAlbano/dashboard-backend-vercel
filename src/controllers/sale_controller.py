@@ -2,6 +2,7 @@ from flask import request, jsonify
 from src.services.sale_service import SaleService
 from src.models.sale import Sale
 from dateutil import parser
+from bson import json_util
 import json
 
 
@@ -46,7 +47,7 @@ class SaleController:
         total_pages = (total_sales // page_size) + 1
 
         return jsonify({
-            "sales": sales,
+            "sales": json.loads(json_util.dumps(sales)),
             "total_pages": total_pages,
             "total_sales": total_sales,
             "message": "Sales retrieved successfully"

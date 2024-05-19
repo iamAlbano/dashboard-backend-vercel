@@ -385,7 +385,6 @@ class SaleRepository:
                         "date": "$date",
                         "customer_id": "$customer_id",
                         "seller_id": "$seller_id",
-                        "date": "$date",
                     },
                     "sales": {"$push": "$$ROOT"},
                     "product_ids": {"$addToSet": "$product_id"},
