@@ -518,10 +518,6 @@ class SaleRepository:
                     },
                     "product_id": {"$first": "$product_id"},
                     "quantity_sold": {"$sum": {"$ifNull": [{'$toDouble': '$quantity'}, 1]}},
-                    "total_sold": {"$sum": {"$multiply": [
-                        {"$ifNull": [{'$toDouble': '$price'}, 1]},
-                        {"$ifNull": [{'$toDouble': '$quantity'}, 1]}
-                    ]}},
                 }
             },
             {
@@ -548,19 +544,13 @@ class SaleRepository:
                     "id": {"$toString": "$_id"},
                     "product_id": "$product_id",
                     "quantity_sold": 1,
-                    "total_sold": 1,
                     "date": 1,
                     "name": "$product.name",
                     "category": "$product.category",
                     "price": {'$ifNull': ['$product.price', 0]},
                     "purchase_price": {"$ifNull": ["$product.purchase_price", 0]},
-                    "stock": {'$ifNull': ['$product.stock', 0]},
-                    "total_bought": {
-                        "$multiply": [
-                            {"$ifNull": [{'$toDouble': '$purchase_price'}, 0]},
-                            {"$ifNull": ['$quantity_sold', 0]}
-                        ]
-                    },
+                    "stock": '$product.stock',
+                    
                 }
             },
         ]

@@ -82,7 +82,6 @@ class ProductService:
                 product['_id'])
 
             if categories and categories != []:
-                print(product['product'])
                 if product['product']['category'] not in categories:
                     continue
 
